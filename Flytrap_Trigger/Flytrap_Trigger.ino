@@ -1,31 +1,28 @@
 //Flytrap Sketch
 
 #include <Servo.h>
+
 #define threshold 600
-
-
-// Initialize servo at 0 degrees
 Servo myservo;
-int pos = 45;
+int pos = 0;
 
-// Initialize Integer arrays
 int g [6] = {0,0,0,0,0,0};
 int old [6];
 int c [6];
 int tot;
 
-// Initialize Pins
 int light = 13;
 int serv = 12;
 int air = 11;
 
-// Initialize Timer
+
 unsigned long t = millis();
 bool timecheck;
 
 void setup() 
 {
   // Set up pins and servo connection
+
   pinMode(light, OUTPUT);
   //pinMode(serv, OUTPUT);
   pinMode(air, OUTPUT);
@@ -50,7 +47,7 @@ void servoClose()
   { // goes from 45 degrees to 135 degrees
     // in steps of 1 degree
     myservo.write(pos);              // tell servo to go to position in variable 'pos'
-    //delay(15);                       // waits 15ms for the servo to reach the position
+    delay(15);                       // waits 15ms for the servo to reach the position
   }
 }
 
@@ -65,7 +62,6 @@ void digPulse(int millisecs, int pin)
       timing = checktime(t,millisecs);
       
     }
-
     digitalWrite(pin, LOW);
 }
 
@@ -127,7 +123,7 @@ void loop() {
     servoOpen();
     //digPulse(1000, light);
     //servoClose();
-    //digPulse(1000, air);
+    digPulse(1000, air);
 
     // clear all the parameters, reset time
     t = millis();

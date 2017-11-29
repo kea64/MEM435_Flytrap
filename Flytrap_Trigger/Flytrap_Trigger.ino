@@ -120,9 +120,11 @@ void loop() {
 
   if (tot >=3)
   {
+
     servoOpen();
     digPulse(1000, light);
-    servoClose();
+
+    //servoClose();
     digPulse(1000, air);
 
     // clear all the parameters, reset time

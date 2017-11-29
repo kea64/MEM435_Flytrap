@@ -11,30 +11,24 @@ int old [6];
 int c [6];
 int tot;
 
+int light = 13;
+int serv = 12;
+int air = 11;
+
 
 unsigned long t = millis();
 bool timecheck;
 
 void setup() 
 {
-  pinMode(13, OUTPUT);
-  pinMode(12, OUTPUT);
-  Serial.begin(115200);
-  myservo.attach(12);
-  
-}
+  // Set up pins and servo connection
 
-void sweep()
-{
-    for (pos = 45; pos <= 135; pos += 1) { // goes from 0 degrees to 180 degrees
-    // in steps of 1 degree
-    myservo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-  for (pos = 135; pos >= 45; pos -= 1) { // goes from 180 degrees to 0 degrees
-    myservo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
+  pinMode(light, OUTPUT);
+  pinMode(serv, OUTPUT);
+  pinMode(air, OUTPUT);
+  Serial.begin(115200);
+  myservo.attach(serv);
+  
 }
 
 void servoOpen()
@@ -57,6 +51,21 @@ void servoClose()
   }
 }
 
+void digPulse(int millisecs, int pin)
+{
+    // set digital pin to high
+    unsigned long timer = millis();
+    bool timing = checktime(timer,millisecs);
+    digitalWrite(pin, HIGH);
+    while ( timing == false)
+    {
+      timing = checktime(t,millisecs);
+      
+    }
+    digitalWrite(pin, LOW);
+}
+
+
 int oncheck(int check1, int check2, int thresh)
 {
     int ret;
@@ -74,7 +83,6 @@ int oncheck(int check1, int check2, int thresh)
     return ret;
 }
 
-
 bool checktime(unsigned long timer, int seconds)
 {
   unsigned long tnew = millis() - timer;
@@ -90,28 +98,6 @@ bool checktime(unsigned long timer, int seconds)
   
 }
 
-
-void release(int t)
-{
-    // open servo motor and close it after time t
-}
-
-void digOn(int millisecs, int pin)
-{
-    // turn on nano light for t seconds
-    unsigned long timer = millis();
-    bool timing = checktime(timer,millisecs);
-    digitalWrite(pin, HIGH);
-    sweep();
-    while ( timing == false)
-    {
-      timing = checktime(t,millisecs);
-      
-    }
-
-    digitalWrite(13, LOW);
-
-}
 
 void loop() {
  for (int a = 0; a<=5; a++)
@@ -134,12 +120,10 @@ void loop() {
 
   if (tot >=3)
   {
-    
-    // close the trap:
-        // release()
-        // pump()
-    digOn(1000, 13);
-
+    servoOpen();
+    digPulse(1000, light);
+    servoClose();
+    pump();
 
     // clear all the parameters, reset time
     t = millis();

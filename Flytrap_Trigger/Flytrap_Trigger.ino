@@ -24,9 +24,9 @@ void setup()
   // Set up pins and servo connection
 
   pinMode(light, OUTPUT);
-  pinMode(serv, OUTPUT);
+  //pinMode(serv, OUTPUT);
   pinMode(air, OUTPUT);
-  Serial.begin(115200);
+  //Serial.begin(115200);
   myservo.attach(serv);
   
 }
@@ -37,7 +37,7 @@ void servoOpen()
   { // goes from 45 degrees to 135 degrees
     // in steps of 1 degree
     myservo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
+    //delay(15);                       // waits 15ms for the servo to reach the position
   }
 }
 
@@ -47,7 +47,7 @@ void servoClose()
   { // goes from 45 degrees to 135 degrees
     // in steps of 1 degree
     myservo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
+    //delay(15);                       // waits 15ms for the servo to reach the position
   }
 }
 
@@ -120,10 +120,8 @@ void loop() {
 
   if (tot >=3)
   {
-
     servoOpen();
-    digPulse(1000, light);
-
+    //digPulse(1000, light);
     //servoClose();
     digPulse(1000, air);
 

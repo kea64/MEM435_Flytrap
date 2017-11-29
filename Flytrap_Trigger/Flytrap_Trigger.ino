@@ -47,7 +47,7 @@ void servoClose()
   { // goes from 45 degrees to 135 degrees
     // in steps of 1 degree
     myservo.write(pos);              // tell servo to go to position in variable 'pos'
-    //delay(15);                       // waits 15ms for the servo to reach the position
+    delay(15);                       // waits 15ms for the servo to reach the position
   }
 }
 

@@ -124,14 +124,8 @@ void loop() {
 
   if (tot >=3)
   {
-<<<<<<< HEAD
     servoOpen();
     //digPulse(1000, light);
-=======
-
-    //servoOpen();
-    digPulse(1000, light);
->>>>>>> 82d54586ef63ee5f63f47720601c4dd3428a3e62
     //servoClose();
     //digPulse(1000, air);
 

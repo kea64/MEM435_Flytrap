@@ -1,28 +1,31 @@
 //Flytrap Sketch
-
 #include <Servo.h>
-
 #define threshold 600
+
+// Initialize servo
 Servo myservo;
 int pos = 0;
 
+// Initialize Digital Pin Positions
+int light = 13;
+int serv = 12;
+int air = 11;
+
+// Initialize Sensor Variables
 int g [6] = {0,0,0,0,0,0};
 int old [6];
 int c [6];
 int tot;
 
-int light = 13;
-int serv = 12;
-int air = 11;
 
-
+// Initialize Clock
 unsigned long t = millis();
 bool timecheck;
+
 
 void setup() 
 {
   // Set up pins and servo connection
-
   pinMode(light, OUTPUT);
   //pinMode(serv, OUTPUT);
   pinMode(air, OUTPUT);
@@ -33,6 +36,8 @@ void setup()
 
 void servoOpen()
 {
+  // Move servo from closed to open position
+
   for (pos = 45; pos <= 135; pos += 1) 
   { // goes from 45 degrees to 135 degrees
     // in steps of 1 degree
@@ -43,6 +48,7 @@ void servoOpen()
 
 void servoClose()
 {
+  // Move Servo from open to closed position
   for (pos = 135; pos <= 45; pos += 1) 
   { // goes from 45 degrees to 135 degrees
     // in steps of 1 degree
@@ -68,6 +74,7 @@ void digPulse(int millisecs, int pin)
 
 int oncheck(int check1, int check2, int thresh)
 {
+  // Check if signal from vibe sensors is high enough to trigger
     int ret;
     int vol = check1 - check2;
     
@@ -83,11 +90,11 @@ int oncheck(int check1, int check2, int thresh)
     return ret;
 }
 
-bool checktime(unsigned long timer, int seconds)
+bool checktime(unsigned long timer, int s)
 {
+  // Determine s time has gone by
   unsigned long tnew = millis() - timer;
-  
-  if (tnew >= seconds)
+  if (tnew >= s)
   {
     return true;
   }
@@ -95,55 +102,71 @@ bool checktime(unsigned long timer, int seconds)
   {
     return false;
   }
-  
 }
 
 
-void loop() {
- for (int a = 0; a<=5; a++)
- {
+void loop() 
+{
+  // Set old values to last g values
+  for (int a = 0; a<=5; a++)
+  {
+    
     old[a] = g[a];  
- }
-
-
-  for (int i=0; i<=5; i++)
-  {
-    g[i] = analogRead(i);
   }
-  for (int k =0; k<=5; k++)
-  {
-    c[k] = oncheck(g[k],old[k], threshold);
-  }
-  
-  tot = c[0]+c[1]+c[2]+c[3]+c[4]+c[5];
-  timecheck = checktime(t,4000);
 
-  if (tot >=3)
-  {
-    servoOpen();
-    delay(10000);
-    servoClose();
-    delay(1000);
-    digPulse(1000, air);
-    
-
-    // clear all the parameters, reset time
-    t = millis();
-    for ( int a =0; a<=5; a++ )
+    //Get new sensor values
+    for (int i=0; i<=5; i++)
     {
-        c[a] = 0;
+      g[i] = analogRead(i);
     }
-  }
-  else if (timecheck == true)
-  {
-    //clear all the parameters, reset time
-    t = millis();
-    
-    for ( int z =0; z<=5; z++)
+
+    // Check for sensor values
+    for (int k =0; k<=5; k++)
     {
-        c[z] = 0;
+      c[k] = oncheck(g[k],old[k], threshold);
     }
-    
-  }
+
+
+    // Count number of sensor ons
+    tot = c[0]+c[1]+c[2]+c[3]+c[4]+c[5];
+
+    // Check elapsed time
+    timecheck = checktime(t,4000);
+
+    if (tot >=3)
+    {
+      //Triggers activated Trap
+
+      //Deflate balloon
+      servoOpen();
+
+      //Wait 10 seconds
+      delay(10000);
+
+      //Close Servo
+      servoClose();
+      delay(1000);
+
+      //Reinflate balloon
+      digPulse(1000, air);
+
+      // clear all the parameters, reset time
+      t = millis();
+      for ( int a =0; a<=5; a++ )
+      {
+          c[a] = 0;
+      }
+    }
+    else if (timecheck == true)
+    {
+      //clear all the parameters, reset time
+      t = millis();
+      
+      for ( int z =0; z<=5; z++)
+      {
+          c[z] = 0;
+      }
+      
+    }
   
 }

@@ -37,6 +37,26 @@ void sweep()
   }
 }
 
+void servoOpen()
+{
+  for (pos = 45; pos <= 135; pos += 1) 
+  { // goes from 45 degrees to 135 degrees
+    // in steps of 1 degree
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+}
+
+void servoClose()
+{
+  for (pos = 135; pos <= 45; pos += 1) 
+  { // goes from 45 degrees to 135 degrees
+    // in steps of 1 degree
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+}
+
 int oncheck(int check1, int check2, int thresh)
 {
     int ret;

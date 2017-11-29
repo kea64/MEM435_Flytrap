@@ -123,7 +123,7 @@ void loop() {
     servoOpen();
     digPulse(1000, light);
     servoClose();
-    pump();
+    digPulse(1000, air);
 
     // clear all the parameters, reset time
     t = millis();
